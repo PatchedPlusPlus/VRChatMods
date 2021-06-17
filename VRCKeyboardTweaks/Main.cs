@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Collections;
 using BetterVRCKeyboard;
-using gompoCommon;
+//using gompoCommon;
 using MelonLoader;
 using UnhollowerRuntimeLib;
 using UnityEngine;
@@ -19,7 +20,22 @@ namespace VRCKeyboardTweaks
         private static AssetBundle iconsAssetBundle = null;
         private static AudioSource clickAudioSource;
         private static GameObject inputPopup;
-        public override void VRChat_OnUiManagerInit()
+
+
+
+        public override void OnApplicationStart()
+        {
+            MelonCoroutines.Start(StartUiManagerInitIEnumerator());
+        }
+        private IEnumerator StartUiManagerInitIEnumerator()
+        {
+            while (VRCUiManager.prop_VRCUiManager_0 == null)
+                yield return null;
+
+            VRChat_OnUiManagerInit();
+        }
+
+        public static void VRChat_OnUiManagerInit()
         {
             ModSettings.RegisterSettings();
             inputPopup = GameObject.Find("UserInterface/MenuContent/Popups/InputPopup");
