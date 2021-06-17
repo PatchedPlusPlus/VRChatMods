@@ -39,7 +39,7 @@ namespace ActionMenuUtils
             Instance = this;
             try
             {
-                //Adapted from knah's JoinNotifier mod found here: https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs 
+                //Adapted from knah's JoinNotifier mod found here: https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs
                 using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ActionMenuUtils.icons"))
                 using (var tempStream = new MemoryStream((int)stream.Length))
                 {
@@ -72,12 +72,12 @@ namespace ActionMenuUtils
                 actionMenuApi = new ActionMenuAPI();
                 SetupButtons();
             }
-            
-        }
-        
-        
 
-       
+        }
+
+
+
+
         private static void SetupButtonsForAMAPI()
         {
             VRCActionMenuPage.AddSubMenu(ActionMenuPage.Options, "SOS",
@@ -85,7 +85,7 @@ namespace ActionMenuUtils
                 {
                     //Respawn
                     if (ModSettings.confirmRespawn)
-                        CustomSubMenu.AddSubMenu("Respawn", 
+                        CustomSubMenu.AddSubMenu("Respawn",
                             () => CustomSubMenu.AddButton("Confirm Respawn", Utils.Respawn, respawnIcon),
                             respawnIcon
                         );
@@ -95,25 +95,25 @@ namespace ActionMenuUtils
                     //Reset Avatar
                     if (ModSettings.confirmAvatarReset)
                         CustomSubMenu.AddSubMenu("Reset Avatar",
-                            () => CustomSubMenu.AddButton("Confirm Reset Avatar", Utils.ResetAvatar, resetAvatarIcon), 
+                            () => CustomSubMenu.AddButton("Confirm Reset Avatar", Utils.ResetAvatar, resetAvatarIcon),
                             resetAvatarIcon
                         );
                     else
                         CustomSubMenu.AddButton("Reset Avatar", Utils.ResetAvatar, resetAvatarIcon);
-                   
+
                     //Instance Rejoin
                     if (ModSettings.confirmInstanceRejoin)
-                        CustomSubMenu.AddSubMenu("Rejoin Instance", 
-                            () => CustomSubMenu.AddButton("Confirm Instance Rejoin", Utils.RejoinInstance, rejoinInstanceIcon), 
+                        CustomSubMenu.AddSubMenu("Rejoin Instance",
+                            () => CustomSubMenu.AddButton("Confirm Instance Rejoin", Utils.RejoinInstance, rejoinInstanceIcon),
                             rejoinInstanceIcon
                         );
                     else
                         CustomSubMenu.AddButton("Rejoin Instance", Utils.RejoinInstance, rejoinInstanceIcon);
-                    
+
                     //Go Home
                     if (ModSettings.confirmGoHome)
-                        CustomSubMenu.AddSubMenu("Go Home", 
-                            () => CustomSubMenu.AddButton("Confirm Go Home",Utils.Home, goHomeIcon), 
+                        CustomSubMenu.AddSubMenu("Go Home",
+                            () => CustomSubMenu.AddButton("Confirm Go Home",Utils.Home, goHomeIcon),
                             goHomeIcon
                         );
                     else
@@ -129,21 +129,21 @@ namespace ActionMenuUtils
 
         private static void SetupButtons()
         {
-           
+
             actionMenuApi.AddPedalToExistingMenu(ActionMenuAPI.ActionMenuPageType.Options, delegate
             {
                 actionMenuApi.CreateSubMenu(() => {
-                    
+
                     if (ModSettings.confirmRespawn)
-                        actionMenuApi.AddPedalToCustomMenu(() => 
-                
+                        actionMenuApi.AddPedalToCustomMenu(() =>
+
                                 actionMenuApi.CreateSubMenu(() =>
                                     actionMenuApi.AddPedalToCustomMenu(Utils.Respawn, "Confirm Respawn", respawnIcon)
                                 ), "Respawn", respawnIcon
                         );
                     else
                         actionMenuApi.AddPedalToCustomMenu(Utils.Respawn, "Respawn", respawnIcon);
-                    
+
                     if (ModSettings.confirmGoHome)
                         actionMenuApi.AddPedalToCustomMenu(() =>
                                 actionMenuApi.CreateSubMenu( () =>
@@ -152,7 +152,7 @@ namespace ActionMenuUtils
                         );
                     else
                         actionMenuApi.AddPedalToCustomMenu(Utils.Home, "Go Home", goHomeIcon);
-                    
+
                     if (ModSettings.confirmAvatarReset)
                         actionMenuApi.AddPedalToCustomMenu(() =>
                                 actionMenuApi.CreateSubMenu(() =>
@@ -161,11 +161,11 @@ namespace ActionMenuUtils
                         );
                     else
                         actionMenuApi.AddPedalToCustomMenu(Utils.ResetAvatar, "Reset Avatar", resetAvatarIcon);
-                    
+
                     if (ModSettings.confirmInstanceRejoin)
                     {
-                        actionMenuApi.AddPedalToCustomMenu(() => 
-                
+                        actionMenuApi.AddPedalToCustomMenu(() =>
+
                                 actionMenuApi.CreateSubMenu(() =>
                                     actionMenuApi.AddPedalToCustomMenu(Utils.RejoinInstance, "Confirm Instance Rejoin", rejoinInstanceIcon)
                                 ), "Rejoin Instance", rejoinInstanceIcon
@@ -173,14 +173,14 @@ namespace ActionMenuUtils
                     }
                     else
                         actionMenuApi.AddPedalToCustomMenu(Utils.RejoinInstance, "Rejoin Instance", rejoinInstanceIcon);
-                    
+
                 });
             }, "Help", helpIcon);
         }
-        
+
         public Main()
         {
-            LoaderCheck.CheckForRainbows();
+            //LoaderCheck.CheckForRainbows();
         }
     }
 

@@ -50,7 +50,7 @@ namespace WorldPredownload
         
         public WorldPredownload()
         {
-            LoaderCheck.CheckForRainbows();
+            //LoaderCheck.CheckForRainbows();
         }
     }
 }

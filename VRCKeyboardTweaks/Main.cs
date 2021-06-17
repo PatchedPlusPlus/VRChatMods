@@ -91,7 +91,7 @@ namespace VRCKeyboardTweaks
 
         public Main()
         {
-            LoaderCheck.CheckForRainbows();
+            //LoaderCheck.CheckForRainbows();
         }
     }
 }

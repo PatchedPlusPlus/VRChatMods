@@ -45,7 +45,7 @@ namespace DownloadFix
 
         public DownloadFix()
         {
-            LoaderCheck.CheckForRainbows();
+            //LoaderCheck.CheckForRainbows();
         }
     }
 }
