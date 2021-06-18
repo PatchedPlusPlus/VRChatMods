@@ -83,6 +83,11 @@
             <Private>false</Private>
             <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\UnityEngine.XRModule.dll</HintPath>
         </Reference>
+        <Reference Include="UniTask, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <SpecificVersion>false</SpecificVersion>
+            <Private>false</Private>
+            <HintPath>$(MsBuildThisFileDirectory)..\..\..\Dependencies\MelonLoader\Managed\UniTask.dll</HintPath>
+        </Reference>
         <Reference Include="MelonLoader, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <SpecificVersion>false</SpecificVersion>
             <Private>false</Private>
