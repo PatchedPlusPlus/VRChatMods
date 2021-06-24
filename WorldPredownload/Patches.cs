@@ -9,7 +9,9 @@ using UnhollowerBaseLib;
 using UnhollowerBaseLib.Attributes;
 using VRC.Core;
 using VRC.UI;
+using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
+using WorldPredownload.Helpers;
 using WorldPredownload.UI;
 using InfoType = VRC.UI.PageUserInfo.EnumNPublicSealedvaNoOnOfSeReBlInFa10Unique;
 using ListType = UiUserList.EnumNPublicSealedvaNoInFrOnOfSeInFa9vUnique;
@@ -24,6 +26,15 @@ namespace WorldPredownload
         private static void Prefix()
         {
             WorldDownloadManager.CancelDownload();
+        }
+    }
+
+    [HarmonyPatch(typeof(NetworkManager), "OnJoinedRoom")]
+    internal class OnJoinedRoomPatch
+    {
+        private static void Prefix()
+        {
+            CacheManager.UpdateDirectories();
         }
     }
 
@@ -74,34 +85,6 @@ namespace WorldPredownload
             byte something1, byte something2, IntPtr additionalJunk);
     }
 
-
-    internal class WorldDownloadListener
-    {
-        public static void Patch()
-        {
-            /*WorldPredownload.HarmonyInstance.Patch(Utilities.WorldDownloadMethodInfo,
-                new HarmonyMethod(typeof(WorldDownloadListener).GetMethod(nameof(Prefix))));*/
-        }
-
-        /*public static void Prefix(ApiWorld __0, ref OnDownloadComplete __2)
-        {
-            __2 = Delegate.Combine(
-                __2,
-                (OnDownloadComplete) new Action<AssetBundleDownload>(
-                    _ =>
-                    {
-                        if (CacheManager.WorldFileExists(__0.id))
-                            CacheManager.AddDirectory(CacheManager.ComputeAssetHash(__0.id));
-                        else
-                            MelonLogger.Warning(
-                                $"Failed to verify world {__0.id} was downloaded. No idea why this would happen");
-                    }
-                )
-            ).Cast<OnDownloadComplete>();
-        }*/
-    }
-
-
     //I accidently found that this neat little method which opens the notification more actions page a while ago while fixing up advanced invites 
     //[HarmonyPatch(typeof(NotificationManager), "Method_Private_Void_Notification_1")]
     internal class NotificationMoreActions
@@ -113,6 +96,7 @@ namespace WorldPredownload
             var openMoreActionsMethod = typeof(NotificationManager).GetMethods()
                 .Where(m =>
                     m.Name.StartsWith("Method_Private_Void_Notification_") &&
+                    m.XRefScanFor("AcceptNotification for notification:") &&
                     !m.Name.Contains("PDM"))
                 .OrderBy(m => m.GetCustomAttribute<CallerCountAttribute>().Count)
                 .Last();
@@ -123,6 +107,7 @@ namespace WorldPredownload
         public static void Prefix(Notification __0)
         {
             selectedNotification = __0;
+            MelonLogger.Msg("Called patch");
             InviteButton.UpdateText();
         }
     }

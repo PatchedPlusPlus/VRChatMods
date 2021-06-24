@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VRC.Core;
 using WorldPredownload.Cache;
+using WorldPredownload.Helpers;
 using WorldPredownload.UI;
 using OnDownloadProgress = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoUnUnique;
 
@@ -22,6 +23,8 @@ namespace WorldPredownload.DownloadManager
         public static DownloadInfo DownloadInfo;
 
         private static WebClient webClient;
+
+        private static string file;
         public static bool downloading { get; set; }
         private static bool cancelled { get; set; }
 
@@ -32,6 +35,7 @@ namespace WorldPredownload.DownloadManager
                 if (ModSettings.showHudMessages) Utilities.QueueHudMessage("Download Cancelled");
                 cancelled = true;
                 webClient.CancelAsync();
+                webClient.Dispose();
             }
         }
 
@@ -148,27 +152,30 @@ namespace WorldPredownload.DownloadManager
 
         [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
         public static void Download(ApiWorld apiWorld, DownloadProgressChangedEventHandler progress,
-            DownloadDataCompletedEventHandler complete, CancelEventHandler cancel)
+            AsyncCompletedEventHandler complete, CancelEventHandler cancel)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            if (webClient == null)
-            {
-                webClient = new WebClient();
-                webClient.Headers.Add("user-agent",
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
-                webClient.DownloadProgressChanged += progress;
-                webClient.DownloadDataCompleted += complete;
-            }
+            webClient?.Dispose();
+            webClient = new WebClient();
+            webClient.Headers.Add("user-agent", ModSettings.downloadUserAgent);
+            webClient.DownloadProgressChanged += progress;
+            webClient.DownloadFileCompleted += complete;
 
             var cachePath = CacheManager.GetCache().path;
             var assetHash = CacheManager.ComputeAssetHash(apiWorld.id);
             var dir = Path.Combine(cachePath, assetHash);
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             var assetVersionDir = Path.Combine(dir,
-                "0000000000000000000000000000" + CacheManager.ComputeVersionString(apiWorld.version));
+                "000000000000000000000000" + CacheManager.ComputeVersionString(apiWorld.version));
             if (!Directory.Exists(assetVersionDir)) Directory.CreateDirectory(assetVersionDir);
 
-            webClient.DownloadFileAsync(new Uri(apiWorld.assetUrl), Path.Combine(assetVersionDir, "__data"));
+            var fileName = Path.Combine(assetVersionDir, "__data");
+            MelonLogger.Msg($"Starting world download for: {apiWorld.name}");
+            file = fileName;
+
+            if (string.IsNullOrEmpty(apiWorld.assetUrl))
+                MelonLogger.Error("World asset link missing! Did VRChat fail to load the world info quick enough?");
+            webClient.DownloadFileAsync(new Uri(apiWorld.assetUrl), fileName);
         }
     }
 }

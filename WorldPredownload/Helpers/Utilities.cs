@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Cysharp.Threading.Tasks;
-using Harmony;
 using Il2CppSystem;
 using MelonLoader;
 using Transmtn.DTO.Notifications;
-using UnhollowerRuntimeLib.XrefScans;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using VRC.Core;
@@ -17,19 +13,12 @@ using WorldPredownload.DownloadManager;
 using Delegate = System.Delegate;
 using Exception = System.Exception;
 using Object = UnityEngine.Object;
-using OnDownloadProgress = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoUnUnique;
-using StringComparison = System.StringComparison;
 
-namespace WorldPredownload
+namespace WorldPredownload.Helpers
 {
     [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
     public static class Utilities
     {
-        private static readonly List<string> downloadWorldKeyWords =
-            new(new[] {"vrcw", "Worlds", "Failed to parse world '", "' UnityVersion '"});
-
-        private static DownloadWorldDelegate downloadWorldDelegate;
-
         private static ClearErrorsDelegate clearErrorsDelegate;
 
         private static ShowDismissPopupDelegate showDismissPopupDelegate;
@@ -39,22 +28,6 @@ namespace WorldPredownload
         private static PushUIPageDelegate pushUIPageDelegate;
 
         private static AdvancedInvitesInviteDelegate advancedInvitesInviteDelegate;
-
-        public static MethodInfo worldDownloadMethodInfo;
-
-        private static DownloadWorldDelegate GetDownloadWorldDelegate
-        {
-            get
-            {
-                if (downloadWorldDelegate != null) return downloadWorldDelegate;
-                downloadWorldDelegate = (DownloadWorldDelegate) Delegate.CreateDelegate(
-                    typeof(DownloadWorldDelegate),
-                    AssetBundleDownloadManager.prop_AssetBundleDownloadManager_0,
-                    WorldDownloadMethodInfo
-                );
-                return downloadWorldDelegate;
-            }
-        }
 
         private static ClearErrorsDelegate GetClearErrorsDelegate
         {
@@ -158,21 +131,6 @@ namespace WorldPredownload
             }
         }
 
-        public static MethodInfo WorldDownloadMethodInfo
-        {
-            get
-            {
-                if (worldDownloadMethodInfo != null) return worldDownloadMethodInfo;
-
-                //worldDownloadMethodInfo = typeof(AssetBundleDownloadManager).GetMethods().Single(m =>
-                //    m.Name.StartsWith("Method_Internal_") && CheckXrefStrings(m, downloadWorldKeyWords));
-                worldDownloadMethodInfo = typeof(AssetBundleDownloadManager).GetMethods().Single(m =>
-                    m.Name.Equals(
-                        "Method_Internal_UniTask_1_InterfacePublicAbstractAsAsUnique_ApiWorld_MulticastDelegateNInternalSealedVoUnUnique_Boolean_0"));
-                return worldDownloadMethodInfo;
-            }
-        }
-
         public static void AdvancedInvitesHandleInvite(Notification notification)
         {
 #if DEBUG
@@ -188,21 +146,6 @@ namespace WorldPredownload
             GetAdvancedInvitesInviteDelegate(notification);
 #endif
         }
-
-        public static UniTask<InterfacePublicAbstractAsAsUnique> DownloadApiWorld(ApiWorld world,
-            OnDownloadProgress onProgress, bool bypassDownloadSizeLimit)
-        {
-            //return AssetBundleDownloadManager.prop_AssetBundleDownloadManager_0
-            //   .Method_Internal_UniTask_1_InterfacePublicAbstractAsAsUnique_ApiWorld_MulticastDelegateNInternalSealedVoUnUnique_Boolean_0(
-            //      world, onProgress, bypassDownloadSizeLimit);
-            return GetDownloadWorldDelegate(world, onProgress, bypassDownloadSizeLimit);
-        }
-
-        public static void ClearErrors()
-        {
-            GetClearErrorsDelegate();
-        }
-
 
         public static void ShowOptionPopup(string title, string body, string leftButtonText, Action leftButtonAction,
             string rightButtonText, Action rightButtonAction)
@@ -295,101 +238,11 @@ namespace WorldPredownload
             return MelonHandler.Mods.Any(mod => mod.Info.Name.Equals(modName));
         }
 
-        public static bool CheckXrefStrings(MethodBase m, List<string> keywords)
-        {
-            try
-            {
-                foreach (var keyword in keywords)
-                    if (!XrefScanner.XrefScan(m).Any(
-                        instance => instance.Type == XrefType.Global && instance.ReadAsObject() != null && instance
-                            .ReadAsObject().ToString()
-                            .Equals(keyword, StringComparison.OrdinalIgnoreCase)))
-                        return false;
-                return true;
-            }
-            catch
-            {
-            }
-
-            return false;
-        }
-
-        public static bool XRefScanFor(this MethodBase methodBase, string searchTerm)
-        {
-            return XrefScanner.XrefScan(methodBase).Any(
-                xref => xref.Type == XrefType.Global && xref.ReadAsObject()?.ToString()
-                    .IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0);
-        }
-
-        private static bool checkXrefNoStrings(MethodBase m)
-        {
-            try
-            {
-                foreach (var instance in XrefScanner.XrefScan(m))
-                {
-                    if (instance.Type != XrefType.Global || instance.ReadAsObject() == null) continue;
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                MelonLogger.Msg("For loop failed:" + e);
-            }
-
-            return false;
-        }
-
 
         public static void QueueHudMessage(string msg)
         {
             VRCUiManager.prop_VRCUiManager_0.field_Private_List_1_String_0.Add(msg);
             VRCUiManager.prop_VRCUiManager_0.field_Private_List_1_String_0.Add("");
-        }
-
-        public static void ScanMethod(MethodInfo m)
-        {
-            MelonLogger.Msg($"Scanning: {m.FullDescription()}");
-            foreach (var instance in XrefScanner.XrefScan(m))
-                try
-                {
-                    if (instance.Type == XrefType.Global && instance.ReadAsObject() != null)
-                        try
-                        {
-                            MelonLogger.Msg($"   Found String: {instance.ReadAsObject().ToString()}");
-                        }
-                        catch
-                        {
-                        }
-                    else if (instance.Type == XrefType.Method && instance.TryResolve() != null)
-                        try
-                        {
-                            MelonLogger.Msg($"   Found Method: {instance.TryResolve().FullDescription()}");
-                        }
-                        catch
-                        {
-                        }
-                }
-                catch
-                {
-                }
-
-            foreach (var instance in XrefScanner.UsedBy(m))
-                try
-                {
-                    if (instance.Type == XrefType.Method && instance.TryResolve() != null)
-                        try
-                        {
-                            MelonLogger.Msg($"   Found Used By Method: {instance.TryResolve().FullDescription()}");
-                        }
-                        catch
-                        {
-                        }
-                }
-                catch
-                {
-                }
         }
 
 
@@ -417,8 +270,5 @@ namespace WorldPredownload
         private delegate void ClearErrorsDelegate();
 
         private delegate void AdvancedInvitesInviteDelegate(Notification notification);
-
-        private delegate UniTask<InterfacePublicAbstractAsAsUnique> DownloadWorldDelegate(ApiWorld world,
-            OnDownloadProgress onProgress, bool bypassDownloadSizeLimit);
     }
 }
