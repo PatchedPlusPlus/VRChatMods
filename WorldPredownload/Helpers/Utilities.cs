@@ -22,7 +22,7 @@ namespace WorldPredownload.Helpers
 #if DEBUG
             try
             {
-                GetAdvancedInvitesInviteDelegate(notification);
+                Helpers.Delegates.GetAdvancedInvitesInviteDelegate(notification);
             }
             catch (Exception e)
             {
