@@ -3,8 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using ActionMenuApi.Api;
-//using gompoCommon;
-using Harmony;
 using MelonLoader;
 using UnhollowerRuntimeLib;
 using UnhollowerRuntimeLib.XrefScans;
@@ -17,11 +15,12 @@ using Main = ActionMenuUtils.Main;
 
 [assembly: MelonGame("VRChat", "VRChat")]
 [assembly: MelonOptionalDependencies("ActionMenuApi")]
-[assembly: MelonInfo(typeof(Main), "ActionMenuUtils", "1.3.9", "gompo", "https://github.com/gompocp/VRChatMods/releases/")]
+[assembly: MelonInfo(typeof(Main), "ActionMenuUtils", "1.3.10", "gompo", "https://github.com/gompocp/VRChatMods/releases/")]
+[assembly: VerifyLoaderVersion(0, 4, 2, true)]
 
 namespace ActionMenuUtils
 {
-    public class Main : MelonMod
+    public partial class Main : MelonMod
     {
         private static AssetBundle iconsAssetBundle;
         private static Texture2D respawnIcon;
@@ -31,7 +30,7 @@ namespace ActionMenuUtils
         private static Texture2D rejoinInstanceIcon;
         private static ActionMenuAPI actionMenuApi;
         private static MelonMod Instance;
-        public static HarmonyInstance HarmonyInstance => Instance.Harmony;
+        public new static HarmonyLib.Harmony HarmonyInstance => Instance.HarmonyInstance;
 
 
         public override void OnApplicationStart()
@@ -39,7 +38,8 @@ namespace ActionMenuUtils
             Instance = this;
             try
             {
-                //Adapted from knah's JoinNotifier mod found here: https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs
+                if (string.IsNullOrEmpty(ID)) return;
+                //Adapted from knah's JoinNotifier mod found here: https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs 
                 using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ActionMenuUtils.icons"))
                 using (var tempStream = new MemoryStream((int)stream.Length))
                 {
@@ -177,11 +177,7 @@ namespace ActionMenuUtils
                 });
             }, "Help", helpIcon);
         }
-
-        public Main()
-        {
-            //LoaderCheck.CheckForRainbows();
-        }
+        private static string ID = "gompo";
     }
 
     static class Utils
@@ -226,7 +222,7 @@ namespace ActionMenuUtils
         public static void Home()
         {
             if (ModSettings.forceGoHome)
-                Utils.GoHome();
+                GoHome();
             else
                 GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/GoHomeButton").GetComponent<Button>().onClick.Invoke();
         }

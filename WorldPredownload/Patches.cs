@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Harmony;
+using HarmonyLib;
 using MelonLoader;
 using Transmtn.DTO.Notifications;
 using UnhollowerBaseLib;
@@ -35,6 +35,13 @@ namespace WorldPredownload
         private static void Prefix()
         {
             CacheManager.UpdateDirectories();
+            if (ModSettings.hideQMStatusWhenInActive) WorldDownloadStatus.Disable();
+            WorldDownloadManager.Downloading = false;
+            HudIcon.Disable();
+            InviteButton.UpdateTextDownloadStopped();
+            FriendButton.UpdateTextDownloadStopped();
+            WorldButton.UpdateTextDownloadStopped();
+            WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
         }
     }
 
