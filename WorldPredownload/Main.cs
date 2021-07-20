@@ -4,11 +4,11 @@ using WorldPredownload.UI;
 
 [assembly: MelonInfo(typeof(WorldPredownload.WorldPredownload), "WorldPredownload", "1.5.2", "gompo", "https://github.com/gompocp/VRChatMods/releases/")]
 [assembly: MelonGame("VRChat", "VRChat")]
-[assembly: VerifyLoaderVersion(0, 4, 2, true)]
+//[assembly: VerifyLoaderVersion(0, 4, 2, true)]
 
 namespace WorldPredownload
 {
-    internal partial class WorldPredownload : MelonMod
+    internal class WorldPredownload : MelonMod
     {
         private static MelonMod Instance;
         
@@ -27,7 +27,7 @@ namespace WorldPredownload
 
         private void UiManagerInit()
         {
-            if (string.IsNullOrEmpty(ID)) return;
+            //if (string.IsNullOrEmpty(ID)) return;
             InviteButton.Setup();
             FriendButton.Setup();
             WorldButton.Setup();
@@ -45,6 +45,6 @@ namespace WorldPredownload
             ModSettings.LoadSettings();
         }
         
-        private static string ID = "gompo";
+        //private static string ID = "gompo";
     }
 }

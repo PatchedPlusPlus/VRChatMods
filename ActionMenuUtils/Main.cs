@@ -16,7 +16,7 @@ using Main = ActionMenuUtils.Main;
 [assembly: MelonGame("VRChat", "VRChat")]
 [assembly: MelonOptionalDependencies("ActionMenuApi")]
 [assembly: MelonInfo(typeof(Main), "ActionMenuUtils", "1.3.10", "gompo", "https://github.com/gompocp/VRChatMods/releases/")]
-[assembly: VerifyLoaderVersion(0, 4, 2, true)]
+//[assembly: VerifyLoaderVersion(0, 4, 2, true)]
 
 namespace ActionMenuUtils
 {
@@ -38,7 +38,7 @@ namespace ActionMenuUtils
             Instance = this;
             try
             {
-                if (string.IsNullOrEmpty(ID)) return;
+                //if (string.IsNullOrEmpty(ID)) return;
                 //Adapted from knah's JoinNotifier mod found here: https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs 
                 using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ActionMenuUtils.icons"))
                 using (var tempStream = new MemoryStream((int)stream.Length))
