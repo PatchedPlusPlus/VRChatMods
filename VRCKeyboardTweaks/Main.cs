@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [assembly:MelonGame("VRChat", "VRChat")]
-[assembly:MelonInfo(typeof(VRCKeyboardTweaks.Main), "VRCKeyboardTweaks", "1.0.0", "gompo", "https://github.com/gompocp/VRChatMods/releases/")]
+[assembly:MelonInfo(typeof(VRCKeyboardTweaks.Main), "VRCKeyboardTweaks - Unchained", "1.0.0", "gompo, PatchedPlus+", "https://github.com/gompocp/VRChatMods/releases/")]
 
 namespace VRCKeyboardTweaks
 {
@@ -66,9 +66,9 @@ namespace VRCKeyboardTweaks
                 GameObject.Find("UserInterface/MenuContent/Popups/InputPopup/InputField").GetComponent<InputField>().text = String.Empty;
                 audioSource.Play();
                 if(ModSettings.UseTweening) DOTweenWrapper.Punch(() => clearButton.gameObject.transform.localScale, x => clearButton.gameObject.transform.localScale = x, new Vector3(0.3f, 0.3f, 0), 0.1f, 2, 0.4f);
-                
+
             }));
-            
+
             foreach (var button in  GameObject.Find("UserInterface/MenuContent/Popups/InputPopup/Keyboard/Keys").GetComponentsInChildren<Button>())
             {
                 button.onClick.AddListener(new Action(() =>
@@ -90,13 +90,13 @@ namespace VRCKeyboardTweaks
 
         public static void SetClickVolume(float volume)
         {
-            if(clickAudioSource != null) 
+            if(clickAudioSource != null)
                 clickAudioSource.volume = volume;
         }
-        
+
         public static void SetKeyboardScale(float scale)
         {
-            if(inputPopup != null) 
+            if(inputPopup != null)
                 inputPopup.transform.localScale = new Vector3(scale, scale, scale);
         }
 
