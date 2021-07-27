@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [assembly:MelonGame("VRChat", "VRChat")]
-[assembly:MelonInfo(typeof(VRCKeyboardTweaks.Main), "VRCKeyboardTweaks - Unchained", "1.0.0", "gompo, PatchedPlus+", "https://github.com/gompocp/VRChatMods/releases/")]
+[assembly:MelonInfo(typeof(VRCKeyboardTweaks.Main), "VRCKeyboardTweaks", "1.0.0", "gompo, PatchedPlus+", "https://github.com/gompocp/VRChatMods/releases/")]
 
 namespace VRCKeyboardTweaks
 {
