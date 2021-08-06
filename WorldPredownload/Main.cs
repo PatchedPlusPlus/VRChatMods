@@ -2,21 +2,21 @@
 using UIExpansionKit.API;
 using WorldPredownload.UI;
 
-[assembly: MelonInfo(typeof(WorldPredownload.WorldPredownload), "WorldPredownload", "1.5.2", "gompo, PatchedPlus+", "https://github.com/gompocp/VRChatMods/releases/")]
+[assembly: MelonInfo(typeof(WorldPredownload.WorldPredownload), "WorldPredownload", "1.5.3", "gompo, PatchedPlus+", "https://github.com/gompocp/VRChatMods/releases/")]
 [assembly: MelonGame("VRChat", "VRChat")]
-//[assembly: VerifyLoaderVersion(0, 4, 2, true)]
+//[assembly: VerifyLoaderVersion(0, 4, 3, true)]
 
 namespace WorldPredownload
 {
     internal class WorldPredownload : MelonMod
     {
-        private static MelonMod Instance;
-
-        public new static HarmonyLib.Harmony HarmonyInstance => Instance.HarmonyInstance;
+        private static MelonMod instance;
+        
+        public new static HarmonyLib.Harmony HarmonyInstance => instance.HarmonyInstance;
 
         public override void OnApplicationStart()
         {
-            Instance = this;
+            instance = this;
             ModSettings.RegisterSettings();
             ModSettings.LoadSettings();
             SocialMenuSetup.Patch();
@@ -44,7 +44,7 @@ namespace WorldPredownload
         {
             ModSettings.LoadSettings();
         }
-
-        //private static string ID = "gompo";
+        
+        //private static readonly string ID = "gompo";
     }
 }

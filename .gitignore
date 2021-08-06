@@ -7,3 +7,4 @@ packages
 BadAppleFramesProcessor
 *.user
 .vs
+Benchmarks
