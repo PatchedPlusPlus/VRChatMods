@@ -26,6 +26,7 @@ namespace VRCKeyboardTweaks
         public override void OnApplicationStart()
         {
             MelonCoroutines.Start(StartUiManagerInitIEnumerator());
+            ModSettings.RegisterSettings();
         }
         private IEnumerator StartUiManagerInitIEnumerator()
         {
@@ -37,7 +38,6 @@ namespace VRCKeyboardTweaks
 
         public static void VRChat_OnUiManagerInit()
         {
-            ModSettings.RegisterSettings();
             inputPopup = GameObject.Find("UserInterface/MenuContent/Popups/InputPopup");
             SetKeyboardScale(ModSettings.KeyboardScale);
             AudioSource audioSource = GameObject.Find("UserInterface/MenuContent/Popups/InputPopup").AddComponent<AudioSource>();

@@ -27,11 +27,11 @@ namespace VRCKeyboardTweaks
 
         public static void LoadSettings()
         {
-            UseTweening = useTweening.Value;
-            ClickVolume = clickVolume.Value;
-            KeyboardScale = keyboardScale.Value;
-            Main.SetClickVolume(ClickVolume);
-            Main.SetKeyboardScale(KeyboardScale);
+                UseTweening = useTweening.Value;
+                ClickVolume = clickVolume.Value;
+                KeyboardScale = keyboardScale.Value;
+                Main.SetClickVolume(ClickVolume);
+                Main.SetKeyboardScale(KeyboardScale);
         }
     }
 }
