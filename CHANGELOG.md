@@ -1,3 +1,15 @@
+### ActionMenuUtils v1.3.11
+- Recompile to fix issues
+
+### StandaloneThirdPerson v1.1.0
+- Added keybinds to move the rear camera over your avatars shoulders
+
+### StandaloneThirdPerson v1.0.1
+- Quick patch for vr
+
+### StandaloneThirdPerson v1.0.0
+- Initial Release
+
 ### WorldPredownload v1.5.3
 - Recompile for u2019 update
 - Improved speed of cache fetching on world join 
