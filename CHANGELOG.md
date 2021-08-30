@@ -1,3 +1,16 @@
+### WorldPredownload v1.6.1
+- Small bug fix
+
+### WorldPredownload v1.6.0
+- Temporarily disable invite predownloading
+- Fixed downloading issues (Thanks [Natsumi](https://github.com/Natsumi-sama/) for your help :) )
+
+### UpdateChecker v1.0.0
+- Initial release
+
+### StandaloneThirdPerson v1.2.0
+- Added a freeform camera (You can thank [ljoonal](https://github.com/ljoonal/) for that)
+
 ### ActionMenuUtils v1.3.11
 - Recompile to fix issues
 

@@ -5,6 +5,7 @@
         <VrcReferences>true</VrcReferences>
         <Version>1.0.3.0</Version>
         <LangVersion>9</LangVersion>
+        <DebugType>none</DebugType>
     </PropertyGroup>
 
 </Project>

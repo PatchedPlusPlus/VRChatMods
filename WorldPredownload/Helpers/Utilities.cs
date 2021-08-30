@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Il2CppSystem;
 using MelonLoader;
 using Transmtn.DTO.Notifications;
@@ -17,12 +18,16 @@ namespace WorldPredownload.Helpers
     [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
     public static class Utilities
     {
+        private static readonly Regex fileIdRegex = new("/file_[0-9A-Za-z-]+/", RegexOptions.Compiled);
+
+        private static readonly Regex fileVersionRegex = new("(?:\\/file_[0-9A-Za-z-]+\\/)([0-9]+)", RegexOptions.Compiled);
+
         public static void AdvancedInvitesHandleInvite(Notification notification)
         {
 #if DEBUG
             try
             {
-                Helpers.Delegates.GetAdvancedInvitesInviteDelegate(notification);
+                //GetAdvancedInvitesInviteDelegate(notification);
             }
             catch (Exception e)
             {
@@ -129,6 +134,16 @@ namespace WorldPredownload.Helpers
         {
             VRCUiManager.prop_VRCUiManager_0.field_Private_List_1_String_0.Add(msg);
             VRCUiManager.prop_VRCUiManager_0.field_Private_List_1_String_0.Add("");
+        }
+
+        public static string ExtractFileId(string txt)
+        {
+            return fileIdRegex.Match(txt).Groups[1].Value;
+        }
+
+        public static string ExtractFileVersion(string txt)
+        {
+            return fileVersionRegex.Match(txt).Groups[1].Value;
         }
     }
 }
