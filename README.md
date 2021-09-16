@@ -118,6 +118,7 @@ More information [here](https://github.com/gompocp/ActionMenuApi)
 
 ### Acknowledgements
 
+- Uses [Semver](https://github.com/maxhauser/semver) for semver parsing and handling
 - Some code was used from [Slaynash](https://github.com/Slaynash/VRCModUpdater/blob/main/Core/VRCModUpdaterCore.cs) 
 
 ## WorldPredownload
